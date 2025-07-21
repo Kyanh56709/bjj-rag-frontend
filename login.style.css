@@ -1,0 +1,110 @@
+/* Basic Reset and Body Styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 1.8em;
+    color: #333;
+}
+
+.subtitle {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #a0c7e4;
+    cursor: not-allowed;
+}
+
+.error-message {
+    margin-top: 15px;
+    color: #dc3545;
+    font-weight: bold;
+    min-height: 1.2em; /* Prevents layout shift when message appears */
+}
+
+.register-link {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+.register-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+.register-link a:hover {
+    text-decoration: underline;
+}

@@ -1,4 +1,10 @@
 // --- CONFIGURATION ---
+const token = localStorage.getItem('bjj_token');
+if (!token) {
+    // If no token is found, redirect the user to the login page.
+    window.location.href = '/login.html';
+}
+
 const API_URL = "https://bjj-rag-library.onrender.com/api/ask";
 
 // --- GET HTML ELEMENTS ---
@@ -12,6 +18,8 @@ const closeModalButton = document.querySelector(".close-button");
 const videoStage = document.getElementById("video-stage");
 
 // --- EVENT LISTENERS ---
+
+
 
 // Handle form submission
 chatForm.addEventListener("submit", (e) => {
@@ -99,7 +107,7 @@ async function fetchApiResponse(query) {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ query: query })
         });
 
