@@ -122,7 +122,7 @@ async function fetchApiResponse(query) {
 function playVideo(source) {
     // We need to reconstruct the video URL. Let's assume a base URL structure.
     // IMPORTANT: Make sure the video_file_path from your metadata is just the filename.
-    const r2BaseUrl = "https://pub-your-r2-id.r2.dev"; // <-- REPLACE WITH YOUR R2 PUBLIC URL
+    const r2BaseUrl = "https://pub-ee3b210f46814c0a94774fac09e25e1a.r2.dev"; // <-- REPLACE WITH YOUR R2 PUBLIC URL
     const videoFileName = source.video_file_path.split('/').pop(); // Gets 'craig-jones-powertop-vol-1.mp4'
     const videoUrl = `${r2BaseUrl}/${videoFileName}`;
     
