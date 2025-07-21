@@ -13,35 +13,77 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    padding: 20px;
 }
 
-/* Main Chat Container */
-.chat-container {
+/* New Two-Column App Container */
+.app-container {
+    display: flex;
     width: 100%;
-    max-width: 800px;
-    height: 90vh;
+    max-width: 1400px;
+    height: 95vh;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
-/* Chat History Box */
+/* Left Column: Chat Container */
+.chat-container {
+    width: 40%;
+    min-width: 400px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Right Column: Video Container */
+.video-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #1c1c1e; /* Dark background for video */
+}
+
+.video-stage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-placeholder {
+    text-align: center;
+    color: #888;
+}
+
+.video-placeholder h3 {
+    margin-bottom: 10px;
+}
+
+#video-stage video {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: 6px;
+}
+
+/* Chat History Box (no major changes) */
 .chat-box {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    border-bottom: 1px solid #eee;
 }
 
 .message {
     margin-bottom: 15px;
     padding: 10px 15px;
     border-radius: 18px;
-    max-width: 75%;
+    max-width: 90%;
     line-height: 1.5;
+    word-wrap: break-word;
 }
 
 .user-message {
@@ -63,7 +105,7 @@ body {
     color: #666;
 }
 
-/* Sources Section Styling */
+/* Sources Section Styling (no major changes) */
 .sources-container {
     margin-top: 15px;
     padding-top: 10px;
@@ -95,10 +137,11 @@ body {
     font-weight: bold;
 }
 
-/* Chat Input Area */
+/* Chat Input Area (no major changes) */
 .chat-input-area {
     padding: 15px;
     background-color: #f8f9fa;
+    border-top: 1px solid #eee;
 }
 
 .chat-form {
@@ -132,48 +175,4 @@ body {
 
 .chat-form button:hover {
     background-color: #0056b3;
-}
-
-/* Video Modal Styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 900px;
-    border-radius: 8px;
-    position: relative;
-}
-
-.close-button {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-}
-
-#video-player-container video {
-    width: 100%;
-    height: auto;
 }

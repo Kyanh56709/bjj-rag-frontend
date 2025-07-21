@@ -120,29 +120,27 @@ async function fetchApiResponse(query) {
 
 // Displays the video modal and plays the video from the correct timestamp
 function playVideo(source) {
-    // --- TEMPORARILY DISABLED FOR V1 DEPLOYMENT ---
-    console.log("Video playback is disabled for this version. Source clicked:", source);
-    alert("Video playback functionality will be added soon!");
+    // We need to reconstruct the video URL. Let's assume a base URL structure.
+    // IMPORTANT: Make sure the video_file_path from your metadata is just the filename.
+    const r2BaseUrl = "https://pub-your-r2-id.r2.dev"; // <-- REPLACE WITH YOUR R2 PUBLIC URL
+    const videoFileName = source.video_file_path.split('/').pop(); // Gets 'craig-jones-powertop-vol-1.mp4'
+    const videoUrl = `${r2BaseUrl}/${videoFileName}`;
     
-    /*  <-- Start of multi-line comment
-    const videoUrl = source.video_url; 
     const startTime = source.start_seconds;
 
-    if (!videoUrl) {
-        alert("Video URL not found for this source.");
-        return;
-    }
+    console.log(`Attempting to play video: ${videoUrl} at ${startTime} seconds.`);
 
-    videoTitle.innerText = `${source.technique} (from ${source.chapter_title})`;
-    
+    // Clear the video stage of any previous content (like the placeholder)
+    videoStage.innerHTML = "";
+
+    // Create the video element
     const videoElement = document.createElement("video");
     videoElement.controls = true;
-    videoElement.src = `${videoUrl}#t=${startTime}`; 
+    videoElement.autoplay = true; // Start playing immediately
     
-    videoPlayerContainer.innerHTML = "";
-    videoPlayerContainer.appendChild(videoElement);
+    // Set the source and seek to the correct time
+    videoElement.src = `${videoUrl}#t=${startTime}`;
     
-    videoModal.style.display = "block"; 
-    videoElement.play();
-    */ // <-- End of multi-line comment
+    // Append the video player to the stage
+    videoStage.appendChild(videoElement);
 }

@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJJ RAG Assistant</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="chat-container">
-        <div id="chat-box" class="chat-box">
-            <!-- Initial welcome message -->
-            <div class="message bot-message">
-                <p>Hello! I am your BJJ RAG Assistant. Ask me anything about the techniques in your library.</p>
+    <div class="app-container">
+        <!-- Left Column: Chat Interface -->
+        <div class="chat-container">
+            <div id="chat-box" class="chat-box">
+                <div class="message bot-message">
+                    <p>Hello! I am your BJJ RAG Assistant. Ask a question and click on a source to view the video.</p>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <form id="chat-form" class="chat-form">
+                    <input type="text" id="user-input" placeholder="Ask a question..." autocomplete="off">
+                    <button type="submit">Send</button>
+                </form>
             </div>
         </div>
-        <div class="chat-input-area">
-            <form id="chat-form" class="chat-form">
-                <input type="text" id="user-input" placeholder="Ask a question..." autocomplete="off">
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Video Player Modal (hidden by default) -->
-    <div id="video-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">×</span>
-            <h3 id="video-title">Video Title</h3>
-            <div id="video-player-container">
+        <!-- Right Column: Video Player Stage -->
+        <div class="video-container">
+            <div id="video-stage" class="video-stage">
+                <div class="video-placeholder">
+                    <h3>Your Video Will Appear Here</h3>
+                    <p>Click on a source from the chat to begin playback.</p>
+                </div>
                 <!-- Video player will be inserted here by JavaScript -->
             </div>
         </div>
@@ -35,4 +39,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
