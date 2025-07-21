@@ -9,6 +9,7 @@ const videoModal = document.getElementById("video-modal");
 const videoTitle = document.getElementById("video-title");
 const videoPlayerContainer = document.getElementById("video-player-container");
 const closeModalButton = document.querySelector(".close-button");
+const videoStage = document.getElementById("video-stage");
 
 // --- EVENT LISTENERS ---
 
