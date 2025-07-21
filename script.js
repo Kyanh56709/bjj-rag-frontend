@@ -1,8 +1,13 @@
 // --- CONFIGURATION ---
+const appContainer = document.querySelector('.app-container');
 const token = localStorage.getItem('bjj_token');
 if (!token) {
-    // If no token is found, redirect the user to the login page.
+    // If no token, redirect immediately. The user never sees the content.
     window.location.href = '/login.html';
+} else {
+    // If a token EXISTS, make the protected content visible.
+    // This happens so fast the user won't notice the page was ever blank.
+    appContainer.style.visibility = 'visible';
 }
 
 const API_URL = "https://bjj-rag-library.onrender.com/api/ask";
