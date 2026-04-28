@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJJ Assistant Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&family=Shippori+Mincho:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container" id="app" style="visibility: hidden;">
+
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="logo">
+                <svg class="logo-mark" viewBox="0 0 32 32" width="28" height="28">
+                    <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" fill="none" stroke="#c41230" stroke-width="2"/>
+                    <polygon points="16,8 24,13 24,21 16,26 8,21 8,13" fill="#c41230" opacity="0.3"/>
+                    <circle cx="16" cy="16" r="3" fill="#c41230"/>
+                </svg>
+                BJJ <span class="logo-accent">Assistant</span>
+            </div>
+
+            <form id="search-form" class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="global-search" placeholder="Search videos by technique, position, or instructor…">
+                <div class="search-hint">↵</div>
+            </form>
+
+            <nav class="nav-links nav-links-main">
+                <a href="index.html" class="active"><i class="fa-solid fa-book"></i> Library</a>
+                <a href="practice.html"><i class="fa-solid fa-pen"></i> Practice</a>
+            </nav>
+
+            <div class="user-profile">
+                <div class="belt-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <button id="logout-btn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Two-Column Layout -->
+        <main class="main-content">
+
+            <!-- LEFT: Browse Rail — recent searches, instructor filters, position cloud -->
+            <aside class="browse-rail">
+                <div class="rail-grain" aria-hidden="true"></div>
+                <div class="rail-rules" aria-hidden="true"></div>
+
+                <header class="rail-head">
+                    <span class="rail-num">道</span>
+                    <span class="rail-title">Browse</span>
+                    <span class="rail-jp">案内</span>
+                </header>
+
+                <!-- RECENT -->
+                <section class="rail-section" id="rail-recent-section">
+                    <div class="rail-section-head">
+                        <span class="rail-section-num">A</span>
+                        <span class="rail-section-name">Recent</span>
+                        <span class="rail-section-rule"></span>
+                        <button type="button" class="rail-clear" id="rail-recent-clear" title="Clear recent" aria-label="Clear recent searches">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                    <div class="rail-recent" id="rail-recent">
+                        <p class="rail-empty-line">— no searches yet —</p>
+                    </div>
+                </section>
+
+                <!-- INSTRUCTORS -->
+                <section class="rail-section">
+                    <div class="rail-section-head">
+                        <span class="rail-section-num">B</span>
+                        <span class="rail-section-name">Instructors</span>
+                        <span class="rail-section-rule"></span>
+                        <span class="rail-section-meta" id="rail-instructors-meta">CURATED</span>
+                    </div>
+                    <ul class="rail-instructors" id="rail-instructors"></ul>
+                </section>
+
+                <!-- POSITIONS -->
+                <section class="rail-section">
+                    <div class="rail-section-head">
+                        <span class="rail-section-num">C</span>
+                        <span class="rail-section-name">Positions</span>
+                        <span class="rail-section-rule"></span>
+                    </div>
+                    <div class="rail-positions">
+                        <button class="rail-pos" data-q="Closed Guard">Closed Guard</button>
+                        <button class="rail-pos" data-q="Half Guard">Half Guard</button>
+                        <button class="rail-pos" data-q="Open Guard">Open Guard</button>
+                        <button class="rail-pos" data-q="Mount">Mount</button>
+                        <button class="rail-pos" data-q="Side Control">Side Control</button>
+                        <button class="rail-pos" data-q="Back">Back</button>
+                        <button class="rail-pos" data-q="Standing">Standing</button>
+                        <button class="rail-pos" data-q="Leg Lock">Leg Locks</button>
+                        <button class="rail-pos" data-q="Turtle">Turtle</button>
+                    </div>
+                </section>
+
+                <footer class="rail-foot">
+                    <span class="rail-foot-mark">柔術</span>
+                    <span class="rail-foot-text">道場 · EST. 2025</span>
+                </footer>
+            </aside>
+
+            <!-- RIGHT: Video Player + Knowledge Graph -->
+            <section class="content-column">
+
+                <!-- Video Player (hidden until first play) -->
+                <div class="video-player-wrapper" id="video-player-wrapper" style="display:none;">
+                    <div id="video-stage" class="video-stage"></div>
+                </div>
+
+                <!-- Search Stage (shown after a search, before any video plays) -->
+                <section class="search-stage" id="search-stage" style="display:none;"></section>
+
+                <!-- Tatami Hero (shown before any video plays) -->
+                <section class="tatami-hero" id="tatami-hero">
+                    <div class="hero-grid"></div>
+                    <div class="hero-rays"></div>
+                    <div class="hero-noise"></div>
+                    <div class="hero-kanji" aria-hidden="true">柔術</div>
+                    <div class="hero-corner-tl">
+                        <span class="corner-mark">+</span>
+                        <span class="corner-text">N° 001 — VOL. I</span>
+                    </div>
+                    <div class="hero-corner-br">
+                        <span class="corner-text">EST. 2025 · 道場</span>
+                        <span class="corner-mark">+</span>
+                    </div>
+
+                    <div class="hero-layout">
+                        <div class="hero-headline">
+                            <div class="hero-eyebrow">
+                                <span class="eyebrow-dot"></span>
+                                <span class="eyebrow-text">Library · Knowledge Graph · Sensei Bot</span>
+                            </div>
+
+                            <h1 class="hero-title">
+                                <span class="hero-line line-search">Search</span>
+                                <span class="hero-line line-themat">
+                                    <span class="hero-the">the</span><span class="hero-mat">mat<span class="hero-period">.</span></span>
+                                </span>
+                            </h1>
+
+                            <p class="hero-sub">
+                                Hundreds of chapters from world-class instructionals —
+                                <em>indexed, cross-linked, and ready to drill.</em>
+                                Begin with a technique below, or query anything from the bar above.
+                            </p>
+
+                            <div class="hero-hint">
+                                <kbd>↵</kbd>
+                                <span>Press enter to search</span>
+                                <span class="hint-sep">·</span>
+                                <kbd>⌘ K</kbd>
+                                <span>to focus</span>
+                            </div>
+                        </div>
+
+                        <aside class="hero-ledger" aria-label="Library statistics">
+                            <div class="ledger-rule"></div>
+                            <div class="ledger-row">
+                                <div class="ledger-num">12<span class="ledger-plus">+</span></div>
+                                <div class="ledger-label">
+                                    <span class="ledger-en">Instructors</span>
+                                    <span class="ledger-jp">講師</span>
+                                </div>
+                            </div>
+                            <div class="ledger-row">
+                                <div class="ledger-num">800<span class="ledger-plus">+</span></div>
+                                <div class="ledger-label">
+                                    <span class="ledger-en">Chapters</span>
+                                    <span class="ledger-jp">章節</span>
+                                </div>
+                            </div>
+                            <div class="ledger-row">
+                                <div class="ledger-num">∞</div>
+                                <div class="ledger-label">
+                                    <span class="ledger-en">Connections</span>
+                                    <span class="ledger-jp">連結</span>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+
+                    <div class="hero-chip-section">
+                        <div class="chip-section-label">
+                            <span class="chip-label-text">Drill these</span>
+                            <span class="chip-label-rule"></span>
+                            <span class="chip-label-num">08 · STARTERS</span>
+                        </div>
+                        <div class="hero-chips" id="hero-chips">
+                            <button type="button" class="hero-chip" data-q="K-Guard"><span class="chip-num">01</span><span class="chip-name">K-Guard</span></button>
+                            <button type="button" class="hero-chip" data-q="Heel Hook"><span class="chip-num">02</span><span class="chip-name">Heel Hook</span></button>
+                            <button type="button" class="hero-chip" data-q="Berimbolo"><span class="chip-num">03</span><span class="chip-name">Berimbolo</span></button>
+                            <button type="button" class="hero-chip" data-q="Half Guard"><span class="chip-num">04</span><span class="chip-name">Half Guard</span></button>
+                            <button type="button" class="hero-chip" data-q="Mount Escape"><span class="chip-num">05</span><span class="chip-name">Mount Escape</span></button>
+                            <button type="button" class="hero-chip" data-q="Triangle"><span class="chip-num">06</span><span class="chip-name">Triangle</span></button>
+                            <button type="button" class="hero-chip" data-q="Back Take"><span class="chip-num">07</span><span class="chip-name">Back Take</span></button>
+                            <button type="button" class="hero-chip" data-q="Leg Lock"><span class="chip-num">08</span><span class="chip-name">Leg Lock</span></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Now Playing Meta -->
+                <div class="now-playing-bar" id="now-playing-bar" style="display:none;">
+                    <div class="playing-info">
+                        <h2 id="current-title"></h2>
+                        <span id="current-instructor" class="instructor-tag"></span>
+                    </div>
+                    <div class="playing-actions">
+                        <button class="action-btn" id="expand-graph-btn" title="Show in graph">
+                            <i class="fa-solid fa-diagram-project"></i> Show in Graph
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ============ LIBRARY LIST (the videos, center stage) ============ -->
+                <section class="library-block" id="library-block">
+                    <header class="library-head">
+                        <div class="library-head-l">
+                            <span class="library-head-num">01</span>
+                            <h2 class="library-head-title">Library<em> · 資料館</em></h2>
+                            <span id="result-count" class="result-count"></span>
+                        </div>
+
+                        <div class="library-head-mid" id="sidebar-query" hidden>
+                            <span class="library-head-mid-label">Showing</span>
+                            <span class="library-head-mid-text" id="sidebar-query-text"></span>
+                            <button type="button" class="library-clear-q" id="library-clear-q" title="Clear query">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="library-head-r">
+                            <div class="sidebar-tabs library-tabs" id="sidebar-tabs">
+                                <button type="button" class="tab-chip active" data-filter="all">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                    <span>All</span>
+                                    <span class="tab-count" data-count="all">0</span>
+                                </button>
+                                <button type="button" class="tab-chip" data-filter="instructional">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>Instructionals</span>
+                                    <span class="tab-count" data-count="instructional">0</span>
+                                </button>
+                                <button type="button" class="tab-chip" data-filter="mentioned">
+                                    <i class="fa-solid fa-quote-right"></i>
+                                    <span>Mentions</span>
+                                    <span class="tab-count" data-count="mentioned">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Active filter pill bar (shown when an instructor filter is applied) -->
+                    <div class="library-filterbar" id="library-filterbar" hidden>
+                        <span class="filterbar-label">Filtered by</span>
+                        <span class="filterbar-pill" id="filterbar-pill">
+                            <span id="filterbar-pill-text"></span>
+                            <button type="button" id="filterbar-clear" aria-label="Clear filter">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </span>
+                    </div>
+
+                    <div id="video-list" class="video-list video-grid">
+                        <div class="empty-state-library" id="library-empty-default">
+                            <div class="library-num">01</div>
+                            <div class="library-rule"></div>
+                            <p class="library-headline">No search<br><em>yet.</em></p>
+                            <p class="library-sub">Run a query above, pick an instructor on the left, or try a starter:</p>
+                            <div class="library-starters">
+                                <button type="button" class="library-starter" data-q="K-Guard">K-Guard</button>
+                                <button type="button" class="library-starter" data-q="Heel Hook">Heel Hook</button>
+                                <button type="button" class="library-starter" data-q="Berimbolo">Berimbolo</button>
+                                <button type="button" class="library-starter" data-q="Triangle">Triangle</button>
+                            </div>
+                            <span class="library-jp">柔術 · 検索開始</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Knowledge Graph Panel -->
+                <div class="graph-panel">
+                    <div class="graph-panel-header">
+                        <div class="graph-title">
+                            <span class="graph-title-num">02</span>
+                            <span class="graph-title-text">Knowledge<em> Graph</em></span>
+                            <span id="graph-node-count" class="node-count-badge">0 nodes</span>
+                        </div>
+                        <div class="graph-legend">
+                            <span class="leg technique">Technique</span>
+                            <span class="leg position">Position</span>
+                            <span class="leg concept">Concept</span>
+                        </div>
+                        <div class="graph-controls">
+                            <button id="graph-fit-btn" class="ctrl-btn" title="Fit to view">
+                                <i class="fa-solid fa-expand"></i>
+                            </button>
+                            <button id="graph-clear-btn" class="ctrl-btn" title="Clear graph">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="graph-container" class="graph-container">
+                        <svg id="knowledge-graph"></svg>
+                        <div id="graph-empty" class="graph-empty">
+                            <svg class="empty-orbit" viewBox="0 0 240 180" aria-hidden="true">
+                                <defs>
+                                    <radialGradient id="orbitGlow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#c41230" stop-opacity="0.5"/>
+                                        <stop offset="100%" stop-color="#c41230" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+                                <ellipse cx="120" cy="90" rx="95" ry="55" fill="none" stroke="currentColor" stroke-opacity="0.18" stroke-dasharray="2 4"/>
+                                <ellipse cx="120" cy="90" rx="60" ry="34" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="2 4"/>
+                                <circle cx="120" cy="90" r="22" fill="url(#orbitGlow)"/>
+                                <circle cx="120" cy="90" r="7" fill="#c41230"/>
+                                <circle class="orbit-dot orbit-dot-1" cx="215" cy="90" r="5" fill="#d4a850"/>
+                                <circle class="orbit-dot orbit-dot-2" cx="120" cy="35" r="4" fill="#4a90e8"/>
+                                <circle class="orbit-dot orbit-dot-3" cx="60" cy="124" r="4" fill="#d4a850"/>
+                                <circle class="orbit-dot orbit-dot-4" cx="180" cy="124" r="3" fill="#4a90e8"/>
+                            </svg>
+                            <p class="empty-title">Awaiting <em>signal</em></p>
+                            <p class="empty-sub">Search a technique to build the graph<span class="empty-jp">— 検索開始 —</span></p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- ===== FLOATING MASCOT + CHAT ===== -->
+    <div class="floating-agent">
+
+        <!-- Chat Panel (slides up) -->
+        <div id="chat-panel" class="chat-panel" data-open="false">
+            <div class="chat-header">
+                <div class="sensei-identity">
+                    <div class="sensei-avatar">
+                        <span>🥋</span>
+                    </div>
+                    <div class="sensei-meta">
+                        <div class="sensei-name">Sensei Bot</div>
+                        <div class="sensei-status"><span class="status-dot"></span> Ready to roll</div>
+                    </div>
+                </div>
+                <button id="chat-close-btn" class="close-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="chat-box" class="chat-box">
+                <div class="message bot-message">
+                    <p><strong>Oss! I'm Sensei Bot</strong> — your AI guide to the BJJ library.</p>
+                    <p>Ask about a technique, position, or concept. I'll surface the right chapters and grow the Knowledge Graph as we talk.</p>
+                </div>
+            </div>
+
+            <div class="chat-footer">
+                <form id="chat-form">
+                    <input type="text" id="user-input" placeholder="Ask about a technique or position..." autocomplete="off">
+                    <button type="submit">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Persistent intro peek (so users know what the floating button is) -->
+        <div id="mascot-peek" class="mascot-peek" role="note" aria-live="polite">
+            <button class="mascot-peek-close" id="mascot-peek-close" aria-label="Dismiss intro">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mascot-peek-eyebrow">
+                <span class="peek-dot"></span>
+                <span>SENSEI BOT · AI ASSISTANT</span>
+            </div>
+            <p class="mascot-peek-title">Ask anything about BJJ.</p>
+            <p class="mascot-peek-sub">I search the chapter library and build the knowledge graph from your question.</p>
+            <div class="mascot-peek-cta">
+                <span>Tap the mat to chat</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
+            <div class="mascot-peek-tail" aria-hidden="true"></div>
+        </div>
+
+        <!-- Mascot Button -->
+        <button id="mascot-btn" class="mascot-btn" aria-label="Open Sensei Bot">
+            <div class="mascot-ring mascot-ring-1"></div>
+            <div class="mascot-ring mascot-ring-2"></div>
+            <div class="mascot-face">🥋</div>
+        </button>
+    </div>
+
+    <!-- ===== NODE INFO POPUP ===== -->
+    <div id="node-popup" class="node-popup" style="display:none;">
+        <div class="node-popup-header">
+            <div class="node-popup-title-group">
+                <span id="node-popup-badge" class="node-badge"></span>
+                <h4 id="node-popup-name"></h4>
+            </div>
+            <button id="node-popup-close" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="node-popup-body" class="node-popup-body">
+            <p class="node-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chapters...</p>
+        </div>
+        <div class="node-popup-actions">
+            <button id="node-search-btn" class="popup-action-btn primary">
+                <i class="fa-solid fa-magnifying-glass"></i> Find Videos
+            </button>
+            <button id="node-expand-btn" class="popup-action-btn secondary">
+                <i class="fa-solid fa-sitemap"></i> Expand Graph
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
