@@ -1,0 +1,207 @@
+/* Practice page — leans on variables defined in style.css */
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.nav-links a {
+    color: var(--text-muted, #9aa0a6);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95em;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--text-bright, #f0f0f0); }
+.nav-links a.active {
+    color: var(--crimson, #c41230);
+    background: rgba(196, 18, 48, 0.08);
+}
+.logo-link { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; }
+
+.practice-main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+}
+
+.practice-h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.6em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.practice-h1 em { font-style: italic; color: var(--crimson, #c41230); }
+
+.practice-h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.practice-sub {
+    color: var(--text-muted, #9aa0a6);
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+/* ── Journal form ─────────────────────────────────────────── */
+.journal-form textarea,
+.coach-form textarea {
+    width: 100%;
+    padding: 14px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 1em;
+    line-height: 1.5;
+    background: var(--bg-card, #1a1a1c);
+    color: var(--text-bright, #f0f0f0);
+    border: 1px solid var(--border, #2a2a2c);
+    border-radius: 6px;
+    resize: vertical;
+}
+.journal-form textarea:focus,
+.coach-form textarea:focus {
+    outline: none;
+    border-color: var(--crimson, #c41230);
+    box-shadow: 0 0 0 3px rgba(196, 18, 48, 0.15);
+}
+
+.journal-form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+.journal-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
+    color: var(--text-muted, #9aa0a6);
+}
+.journal-counter.warn { color: #d4a850; }
+.journal-counter.over { color: var(--crimson, #c41230); }
+
+#journal-submit, #coach-submit {
+    background: var(--crimson, #c41230);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+#journal-submit:disabled, #coach-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.journal-error {
+    margin-top: 10px;
+    color: var(--crimson, #c41230);
+    font-size: 0.9em;
+    min-height: 1.2em;
+}
+
+/* ── Coach output ─────────────────────────────────────────── */
+.coach-output {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--bg-card, #1a1a1c);
+    border: 1px solid var(--border, #2a2a2c);
+    border-radius: 6px;
+}
+.coach-diagnosis {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    color: var(--text-bright, #f0f0f0);
+}
+.coach-recs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+.coach-rec {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--crimson, #c41230);
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+}
+.coach-rec:hover { background: rgba(196, 18, 48, 0.1); }
+.coach-rec-title { font-weight: 600; color: var(--text-bright, #f0f0f0); }
+.coach-rec-meta {
+    font-size: 0.85em;
+    color: var(--text-muted, #9aa0a6);
+    margin-top: 2px;
+}
+
+/* ── Entries history ───────────────────────────────────────── */
+.entries-list { display: flex; flex-direction: column; gap: 12px; }
+.entries-empty {
+    color: var(--text-muted, #9aa0a6);
+    font-style: italic;
+    padding: 16px 0;
+}
+.entry {
+    background: var(--bg-card, #1a1a1c);
+    border: 1px solid var(--border, #2a2a2c);
+    border-radius: 6px;
+    padding: 14px 16px;
+    position: relative;
+}
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.82em;
+    color: var(--text-muted, #9aa0a6);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.entry-content {
+    white-space: pre-wrap;
+    line-height: 1.55;
+    color: var(--text-bright, #f0f0f0);
+}
+.entry-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+.entry-action {
+    background: transparent;
+    border: 1px solid var(--border, #2a2a2c);
+    color: var(--text-muted, #9aa0a6);
+    padding: 4px 10px;
+    font-size: 0.82em;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.entry-action:hover { color: var(--text-bright, #f0f0f0); border-color: var(--crimson, #c41230); }
+.entry-action.danger:hover { color: var(--crimson, #c41230); }
+
+@media (max-width: 700px) {
+    .practice-main { padding: 24px 16px 60px; gap: 40px; }
+    .practice-h1 { font-size: 2em; }
+}
